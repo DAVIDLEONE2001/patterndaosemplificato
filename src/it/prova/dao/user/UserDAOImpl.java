@@ -291,8 +291,30 @@ public class UserDAOImpl extends AbstractMySQLDAO implements UserDAO {
 
 	@Override
 	public List<User> findAllByPasswordIsNull() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		ArrayList<User> result = new ArrayList<User>();
+
+		try (Statement ps = connection.createStatement(); ResultSet rs = ps.executeQuery("select * from user where password is null")) {
+
+			while (rs.next()) {
+				User userTemp = new User();
+				userTemp.setNome(rs.getString("NOME"));
+				userTemp.setCognome(rs.getString("COGNOME"));
+				userTemp.setLogin(rs.getString("LOGIN"));
+				userTemp.setPassword(rs.getString("PASSWORD"));
+				userTemp.setDateCreated(
+						rs.getDate("DATECREATED") != null ? rs.getDate("DATECREATED").toLocalDate() : null);
+				userTemp.setId(rs.getLong("ID"));
+				result.add(userTemp);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
 	}
 
 	@Override
