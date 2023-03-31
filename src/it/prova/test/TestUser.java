@@ -38,7 +38,8 @@ public class TestUser {
 //			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
 
 //			testFindAllByCognome(userDAOInstance);
-			testFindAllByLoginIniziaCon(userDAOInstance);
+//			testFindAllByLoginIniziaCon(userDAOInstance);
+			findByLoginAndPassword(userDAOInstance);
 
 			// ESERCIZIO SUCCESSIVO: implementare metodi mancanti nel DAO
 
@@ -169,6 +170,21 @@ public class TestUser {
 
 		System.out.println(".......testFindAllByLoginIniziaCon fine: PASSED.............");
 	}
-	
-	
+
+	private static void findByLoginAndPassword(UserDAO userDAOInstance) throws Exception {
+		System.out.println(".......findByLoginAndPassword inizio.............");
+		List<User> elencoVociPresenti = userDAOInstance.list();
+		if (elencoVociPresenti.size() < 1)
+			throw new RuntimeException("testFindById : FAILED, non ci sono voci sul DB");
+
+		User primoDellaLista = elencoVociPresenti.get(0);
+
+		User elementoCheRicercoColDAO = userDAOInstance.findByLoginAndPassword(primoDellaLista.getLogin(),
+				primoDellaLista.getPassword());
+		if (elementoCheRicercoColDAO == null || !elementoCheRicercoColDAO.getLogin().equals(primoDellaLista.getLogin()))
+			throw new RuntimeException("findByLoginAndPassword : FAILED, le login non corrispondono");
+
+		System.out.println(".......findByLoginAndPassword fine: PASSED.............");
+	}
+
 }
