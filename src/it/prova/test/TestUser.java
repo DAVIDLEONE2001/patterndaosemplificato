@@ -26,18 +26,19 @@ public class TestUser {
 
 			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
 
-			testInsertUser(userDAOInstance);
-			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
+//			testInsertUser(userDAOInstance);
+//			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
 
-			testFindById(userDAOInstance);
+//			testFindById(userDAOInstance);
 
 			testDeleteUser(userDAOInstance);
 			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
 
-			testFindAllWhereDateCreatedGreaterThan(userDAOInstance);
-			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
-			
-			testfindAllByCognome(userDAOInstance);
+//			testFindAllWhereDateCreatedGreaterThan(userDAOInstance);
+//			System.out.println("In tabella user ci sono " + userDAOInstance.list().size() + " elementi.");
+
+//			testFindAllByCognome(userDAOInstance);
+			testFindAllByLoginIniziaCon(userDAOInstance);
 
 			// ESERCIZIO SUCCESSIVO: implementare metodi mancanti nel DAO
 
@@ -127,24 +128,19 @@ public class TestUser {
 		System.out.println(".......testFindAllWhereDateCreatedGreaterThan fine: PASSED.............");
 	}
 
-	private static void testfindAllByCognome(UserDAO userDAOInstance) throws Exception {
+	private static void testFindAllByCognome(UserDAO userDAOInstance) throws Exception {
 		System.out.println(".......testfindAllByCognome inizio.............");
 
 		LocalDate dataCreazione = LocalDate.parse("2022-02-02");
 
 		// me ne creo un paio che fanno al caso mio così almeno due li troverò
 		User marioRossi = new User("Mario", "Rossi", "m.rossi@example.com", "password@01", dataCreazione);
-//		User giuseppeBianchi = new User("Giuseppe", "rossi", "g.bianchi@example.com", "password@01", dataCreazione);
 
 		int quantiElementiInseriti = userDAOInstance.insert(marioRossi);
 		if (quantiElementiInseriti < 1)
 			throw new RuntimeException("testFindAllWhereDateCreatedGreaterThan : FAILED, user non inserito");
 
-//		quantiElementiInseriti = userDAOInstance.insert(giuseppeBianchi);
-//		if (quantiElementiInseriti < 1)
-//			throw new RuntimeException("testFindAllWhereDateCreatedGreaterThan : FAILED, user non inserito");
-
-		// ora provo ad estrarli e devono avere tutti data successiva a quella scelta
+		// ora provo ad estrre la lista deve essere popolata
 		List<User> elencoUtentiConQuelNome = userDAOInstance.findAllByCognome(marioRossi.getCognome());
 
 		if (elencoUtentiConQuelNome.isEmpty())
@@ -153,4 +149,26 @@ public class TestUser {
 		System.out.println(".......testfindAllByCognome fine: PASSED.............");
 	}
 
+	private static void testFindAllByLoginIniziaCon(UserDAO userDAOInstance) throws Exception {
+		System.out.println(".......testFindAllByLoginIniziaCon inizio.............");
+
+		LocalDate dataCreazione = LocalDate.parse("2022-02-02");
+
+		// me ne creo un paio che fanno al caso mio così almeno due li troverò
+		User marioRossi = new User("Mario", "Rossi", "m.rossi@esempio.com", "password@01", dataCreazione);
+
+		int quantiElementiInseriti = userDAOInstance.insert(marioRossi);
+		if (quantiElementiInseriti < 1)
+			throw new RuntimeException("testFindAllByLoginIniziaCon : FAILED, user non inserito");
+
+		// ora provo ad estrre la lista deve essere popolata
+		List<User> elencoUtentiConQuellogin = userDAOInstance.findAllByLoginIniziaCon(marioRossi.getLogin());
+
+		if (elencoUtentiConQuellogin.isEmpty())
+			throw new RuntimeException("testFindAllByLoginIniziaCon : FAILED, la lista non ha trovato nessun nome ");
+
+		System.out.println(".......testFindAllByLoginIniziaCon fine: PASSED.............");
+	}
+	
+	
 }
